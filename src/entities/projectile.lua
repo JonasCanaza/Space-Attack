@@ -1,10 +1,10 @@
 local projectile = {}
 
-MAX_PROJECTILES = 10
-bullets = {}
-BULLET_WIDTH = 30
+local MAX_PROJECTILES = 10
+local bullets = {}
+local BULLET_WIDTH = 30
 BULLET_HEIGHT = 20
-BULLET_SPEED = 2500
+local BULLET_SPEED = 2500
 
 -- START BULLETS
 for i = 1, MAX_PROJECTILES do
@@ -37,7 +37,7 @@ function projectile.update(deltaTime)
             bullets[i].prevX = bullets[i].x
             bullets[i].x = bullets[i].x + bullets[i].speed * deltaTime
 
-            if bullets[i].x + bullets[i].width > screenWidth then
+            if bullets[i].x > screenWidth then
                 bullets[i].isActive = false
             end
         end
@@ -61,6 +61,10 @@ function projectile.spawn(x, y)
     end
 
     return false
+end
+
+function projectile.getAll()
+    return bullets
 end
 
 return projectile
