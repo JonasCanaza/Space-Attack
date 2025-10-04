@@ -14,9 +14,12 @@ Screens = {
     credits = 4
 }
 
-currentScreen = Screens.gameplay
+currentScreen = Screens.mainMenu
 
 function game.load()
+    math.randomseed(os.time())
+    math.random()
+
     mainMenuScreen.load()
     gameplayScreen.load()
     howToPlayScreen.load()

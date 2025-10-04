@@ -15,18 +15,17 @@ local function handleBulletEnemyCollisions()
     local allBullets = projectiles.getAll()
     local allEnemies = enemies.getAll()
 
-    for bulletIndex = 1, #allBullets do
-        local currentBullet = allBullets[bulletIndex]
-
-        if currentBullet and currentBullet.isActive then
-            for enemyIndex = 1, #allEnemies do
-                local currentEnemy = allEnemies[enemyIndex]
-
-                if currentEnemy and currentEnemy.isActive then
-                    if collision.rayIntersectsRectangle(currentEnemy, currentBullet.prevX, currentBullet.x, currentBullet.y, currentBullet.height) then
-                        currentEnemy.lives = currentEnemy.lives - 1
-                        currentBullet.isActive = false
-                        print(currentEnemy.lives)
+    for i = 1, #allBullets do
+        if allBullets[i] and allBullets[i].isActive then
+            for j = 1, #allEnemies do
+                if allEnemies[j] and allEnemies[j].isActive then
+                    if collision.rayIntersectsRectangle(allEnemies[j], allBullets[i].prevX, allBullets[i].x, allBullets[i].y, allBullets[i].height) then
+                        allEnemies[j].lives = allEnemies[j].lives - 1
+                        allBullets[i].isActive = false
+                        
+                        if allEnemies[j].lives <= 0 then
+                            allEnemies[j].isActive = false
+                        end
                         break
                     end
                 end
@@ -38,9 +37,11 @@ end
 local function handlePlayerEnemyCollisions()
     local allEnemies = enemies.getAll()
 
-    for enemyIndex = 1, #allEnemies do
-        if collision.rectanglesOverlap(player, allEnemies[enemyIndex]) then
-            print("PUM!!")
+    for i = 1, #allEnemies do
+        if collision.rectanglesOverlap(player, allEnemies[i]) and allEnemies[i].isActive then
+            player.lives = player.lives - 1
+            allEnemies[i].isActive = false
+            
         end
     end
 end
@@ -74,6 +75,9 @@ function gameplayScreen.draw()
     player.draw()
     projectiles.draw()
     enemies.draw()
+
+    -- TEST!!!
+    love.graphics.print(player.lives, 600, 0)
 end
 
 function gameplayScreen.keypressed(key)
