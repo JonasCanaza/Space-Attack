@@ -4,7 +4,7 @@ function creditsScreen.load()
 
 end
 
-function creditsScreen.update(deltaTime, game)
+function creditsScreen.update(deltaTime)
 
 end
 

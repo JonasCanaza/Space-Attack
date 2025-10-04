@@ -7,21 +7,24 @@ local ButtonState = {
     Hover = 2,
     Pressed = 3
 }
+local DEFAULT_WIDTH = 100
+local DEFAULT_HEIGTH = 50
+local DEFAULT_NAME = "NO NAME"
 
 function button.create(x, y, width, height, text)
     return {
         x = x,
         y = y,
-        width = width,
-        height = height,
-        text = text or "BOTON",
+        width = width or DEFAULT_WIDTH,
+        height = height or DEFAULT_HEIGTH,
+        text = text or DEFAULT_NAME,
         state = ButtonState.Normal,
         clicked = false
     }
 end
 
 function button.load(btn)
-    -- CARGAN TEXTURAS, ETC
+
 end
 
 function button.update(btn)

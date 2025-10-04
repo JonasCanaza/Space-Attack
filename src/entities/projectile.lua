@@ -30,14 +30,12 @@ function projectile.load()
 end
 
 function projectile.update(deltaTime)
-    local screenWidth = love.graphics.getWidth()
-
     for i = 1, MAX_PROJECTILES do
         if bullets[i] and bullets[i].isActive then
             bullets[i].prevX = bullets[i].x
             bullets[i].x = bullets[i].x + bullets[i].speed * deltaTime
 
-            if bullets[i].x > screenWidth then
+            if bullets[i].x > SCREEN_WIDTH then
                 bullets[i].isActive = false
             end
         end

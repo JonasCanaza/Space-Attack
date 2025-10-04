@@ -10,14 +10,12 @@ function player.load()
 end
 
 function player.update(deltaTime)
-    local screenHeight = love.graphics.getHeight()
-
     if player.y < 0 then
         player.y = 0
     end
 
-    if player.y + player.height > screenHeight then
-        player.y = screenHeight - player.height
+    if player.y + player.height > SCREEN_HEIGHT then
+        player.y = SCREEN_HEIGHT - player.height
     end
 end
 

@@ -17,8 +17,8 @@ local spawnDelay = math.random(MIN_TIMER_COOLDOWN, MAX_TIMER_COOLDOWN)
 local function spawnEnemy()
     for i = 1, MAX_ENEMIES do
         if enemies[i] == nil or enemies[i].isActive == false then
-            local posX = love.graphics.getWidth()
-            local posY = math.random(0, love.graphics.getHeight() - ENEMY_HEIGHT)
+            local posX = SCREEN_WIDTH
+            local posY = math.random(0, SCREEN_HEIGHT - ENEMY_HEIGHT)
             local speedRandom = math.random(MIN_ENEMY_SPEED, MAX_ENEMY_SPEED)
 
             enemies[i] = enemy.create(posX, posY, speedRandom)
@@ -51,7 +51,7 @@ function enemy.update(deltaTime)
             enemies[i].x = enemies[i].x - enemies[i].speed * deltaTime
 
             if enemies[i].x + enemies[i].width < 0 then
-                enemies[i].x = love.graphics.getWidth()
+                enemies[i].x = SCREEN_WIDTH
             end
         end
     end

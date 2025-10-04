@@ -1,9 +1,9 @@
 local gameplayScreen = {}
 
-local player = require("src/entities/player")
-local projectiles = require("src/entities/projectile")
-local enemies = require("src/entities/enemy")
-local collision = require("src/utils/collision")
+local player = require("src.entities.player")
+local projectiles = require("src.entities.projectile")
+local enemies = require("src.entities.enemy")
+local collision = require("src.utils.collision")
 
 -- SOUND
 
@@ -26,7 +26,8 @@ local function handleBulletEnemyCollisions()
                         if allEnemies[j].lives <= 0 then
                             allEnemies[j].isActive = false
                         end
-                        break
+
+                        return
                     end
                 end
             end
@@ -41,7 +42,6 @@ local function handlePlayerEnemyCollisions()
         if collision.rectanglesOverlap(player, allEnemies[i]) and allEnemies[i].isActive then
             player.lives = player.lives - 1
             allEnemies[i].isActive = false
-            
         end
     end
 end
@@ -82,7 +82,7 @@ end
 
 function gameplayScreen.keypressed(key)
     if key == "escape" then
-        currentScreen = Screens.mainMenu
+        currentScreen = screens.mainMenu
     end
 
     if key == "space" then

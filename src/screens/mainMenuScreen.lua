@@ -1,6 +1,7 @@
 local mainMenuScreen = {}
 
-local button = require("src/interface/button")
+local button = require("src.interface.button")
+local exitPanel = require("src.panels.exitPanel")
 
 -- BUTTON
 
@@ -12,14 +13,15 @@ local buttonsNames = {
     "CREDITS",
     "EXIT"
 }
-local ScreenID = {  
+local screenID = {
     gameplay = 1,
     howToPlay = 2,
     credits = 3,
     exit = 4
 }
-local BUTTON_WIDTH = 250
-local BUTTON_HEIGTH = 75
+local WIDTH_BUTTON = 300
+local HEIGHT_BUTTON = 80
+local SPACE_BETWEEN = 5
 
 -- LOGO
 
@@ -27,53 +29,57 @@ local logo = {
     x = 0,
     y = 0,
     width = 600,
-    height = 300
+    height = 350
 }
 
-local function initLogo()
-    local screenWidth = love.graphics.getWidth()
-    local marginTop = 25
+local function initLogoAndButtons()
+    local totalHeight = logo.height + (MAX_BUTTONS * HEIGHT_BUTTON) + (MAX_BUTTONS - 1) * SPACE_BETWEEN
+    local startY = SCREEN_HEIGHT / 2 - totalHeight / 2
 
-    logo.x = logo.x + screenWidth / 2 - logo.width / 2
-    logo.y = marginTop
-end
+    logo.x = SCREEN_WIDTH / 2 - logo.width / 2
+    logo.y = startY
 
-local function initButtons()
-    local screenWidth = love.graphics.getWidth()
-    local menuX = screenWidth / 2 - 250 / 2
-    local spaceBetween = 80
-    local startButtonsY = 270
+    local startButtonsY = logo.y + logo.height + SPACE_BETWEEN
+    local menuX = SCREEN_WIDTH / 2 - WIDTH_BUTTON / 2
 
     for i = 1, MAX_BUTTONS do
-        table.insert(buttons, button.create(menuX,  startButtonsY + spaceBetween * i, BUTTON_WIDTH, BUTTON_HEIGTH, buttonsNames[i]))
+        buttons[i] = button.create(menuX, startButtonsY + (i - 1) * (HEIGHT_BUTTON + SPACE_BETWEEN), WIDTH_BUTTON, HEIGHT_BUTTON, buttonsNames[i])
     end
 end
 
-function mainMenuScreen.load()
-    initLogo()
-    initButtons()
-end
-
-function mainMenuScreen.update(deltaTime)
+local function updateAllButtons()
     for i = 1, MAX_BUTTONS do
         button.update(buttons[i])
     end
 
-    if buttons[ScreenID.gameplay].clicked then
-        currentScreen = Screens.gameplay
+    if buttons[screenID.gameplay].clicked then
+        currentScreen = screens.gameplay
     end
 
-    if buttons[ScreenID.howToPlay].clicked then
-        currentScreen = Screens.howToPlay
+    if buttons[screenID.howToPlay].clicked then
+        currentScreen = screens.howToPlay
     end
 
-    if buttons[ScreenID.credits].clicked then
-        currentScreen = Screens.credits
+    if buttons[screenID.credits].clicked then
+        currentScreen = screens.credits
     end
 
-    if buttons[ScreenID.exit].clicked then
-        love.window.close()
+    if buttons[screenID.exit].clicked then
+        exitPanel.show()
     end
+end
+
+function mainMenuScreen.load()
+    initLogoAndButtons()
+    exitPanel.load()
+end
+
+function mainMenuScreen.update(deltaTime)
+    if not exitPanel.isActive() then
+        updateAllButtons()
+    end
+
+    exitPanel.update()
 end
 
 function mainMenuScreen.draw()
@@ -82,11 +88,13 @@ function mainMenuScreen.draw()
     end
 
     love.graphics.rectangle("fill", logo.x, logo.y, logo.width, logo.height)
+
+    exitPanel.draw()
 end
 
 function mainMenuScreen.keypressed(key)
-    if key == "escape" then 
-        print("EXIT")
+    if key == "escape" then
+        exitPanel.toggle()
     end
 end
 
