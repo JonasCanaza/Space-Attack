@@ -11,6 +11,12 @@ local DEFAULT_WIDTH = 100
 local DEFAULT_HEIGTH = 50
 local DEFAULT_NAME = "NO NAME"
 
+-- TEXTURES
+
+local normalButtonTex
+local hoverButtonTex
+local pressedButtonTex
+
 function button.create(x, y, width, height, text)
     return {
         x = x,
@@ -23,8 +29,10 @@ function button.create(x, y, width, height, text)
     }
 end
 
-function button.load(btn)
-
+function button.load()
+    normalButtonTex = love.graphics.newImage("res/ui/normalButton.png")
+    hoverButtonTex = love.graphics.newImage("res/ui/hoverButton.png")
+    pressedButtonTex = love.graphics.newImage("res/ui/pressedButton.png")
 end
 
 function button.update(btn)
@@ -46,27 +54,34 @@ function button.update(btn)
 end
 
 function button.draw(btn)
+    local texture
+
     -- COLOR PER STATE
     if btn.state == ButtonState.Normal then
 
-        love.graphics.setColor(1, 0, 0)
+        texture = normalButtonTex
 
     elseif btn.state == ButtonState.Hover then
 
-        love.graphics.setColor(0, 0, 1)
+        texture = hoverButtonTex
 
     elseif btn.state == ButtonState.Pressed then
 
-        love.graphics.setColor(0, 1, 0)
+        texture = pressedButtonTex
 
     end
 
     -- PRINT BUTTON
 
-    love.graphics.rectangle("fill", btn.x, btn.y, btn.width, btn.height)
+    local imgWidth = texture:getWidth()
+    local imgHeight = texture:getHeight()
+    local scaleX = btn.width / imgWidth
+    local scaleY = btn.height / imgHeight
+    
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(texture, btn.x, btn.y, 0, scaleX, scaleY)
 
     love.graphics.setFont(font)
-    love.graphics.setColor(1, 1, 1)
     
     local textHeight = font:getHeight(btn.text)
     local textY = btn.y + (btn.height / 2) - (textHeight / 2)

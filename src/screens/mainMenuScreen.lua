@@ -72,6 +72,7 @@ end
 function mainMenuScreen.load()
     initLogoAndButtons()
     exitPanel.load()
+    button.load()
 end
 
 function mainMenuScreen.update(deltaTime)
