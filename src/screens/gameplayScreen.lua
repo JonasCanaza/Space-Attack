@@ -4,6 +4,7 @@ local player = require("src.entities.player")
 local projectiles = require("src.entities.projectile")
 local enemies = require("src.entities.enemy")
 local collision = require("src.utils.collision")
+local pausePanel = require("src.panels.pausePanel")
 
 -- SOUND
 
@@ -51,24 +52,30 @@ function gameplayScreen.load()
     projectiles.load()
     enemies.load()
 
+    pausePanel.load()
+
     shot1 = love.audio.newSource("res/sound/shot01.wav", "static")
 end
 
 function gameplayScreen.update(deltaTime)
-    if love.keyboard.isDown("w") then
-        player.moveUp(deltaTime)
+    if not pausePanel.isActive() then
+        if love.keyboard.isDown("w") then
+            player.moveUp(deltaTime)
+        end
+
+        if love.keyboard.isDown("s") then
+            player.moveDown(deltaTime)
+        end
+
+        player.update(deltaTime)
+        projectiles.update(deltaTime)
+        enemies.update(deltaTime)
+
+        handleBulletEnemyCollisions()
+        handlePlayerEnemyCollisions()
     end
 
-    if love.keyboard.isDown("s") then
-        player.moveDown(deltaTime)
-    end
-
-    player.update(deltaTime)
-    projectiles.update(deltaTime)
-    enemies.update(deltaTime)
-
-    handleBulletEnemyCollisions()
-    handlePlayerEnemyCollisions()
+    pausePanel.update()
 end
 
 function gameplayScreen.draw()
@@ -76,13 +83,12 @@ function gameplayScreen.draw()
     projectiles.draw()
     enemies.draw()
 
-    -- TEST!!!
-    love.graphics.print(player.lives, 600, 0)
+    pausePanel.draw()
 end
 
 function gameplayScreen.keypressed(key)
     if key == "escape" then
-        currentScreen = screens.mainMenu
+        pausePanel.toggle()
     end
 
     if key == "space" then

@@ -4,16 +4,17 @@ local button = require("src.interface.button")
 
 local MAX_BUTTONS = 2
 local buttons = {}
-local buttonsNames = {
-    "RESUME",
-    "EXIT"
+local BUTTONS_NAMES = {
+    "Resume",
+    "Exit"
 }
-local buttonID = {
+local BUTTON_ID = {
     resume = 1,
     exit = 2
 }
 local WIDTH_BUTTON = 300
 local HEIGHT_BUTTON = 80
+local BUTTON_SPACING = 5
 
 local imageMessage = {
     x = 0,
@@ -24,14 +25,17 @@ local imageMessage = {
 
 local isActive = false
 
+local function initMessage()
+    imageMessage.x = SCREEN_WIDTH / 2 - imageMessage.width / 2
+    imageMessage.y = SCREEN_HEIGHT / 2 - (imageMessage.height + (MAX_BUTTONS * HEIGHT_BUTTON + (MAX_BUTTONS - 1) * BUTTON_SPACING)) / 2
+end
+
 local function initButtons()
     local menuX = SCREEN_WIDTH / 2 - WIDTH_BUTTON / 2
-    local spaceBetween = HEIGHT_BUTTON + 5
-
     local startButtonsY = imageMessage.y + imageMessage.height
 
     for i = 1, MAX_BUTTONS do
-        buttons[i] = button.create(menuX, startButtonsY + spaceBetween * (i - 1), WIDTH_BUTTON, HEIGHT_BUTTON, buttonsNames[i])
+        buttons[i] = button.create(menuX, startButtonsY + (HEIGHT_BUTTON + BUTTON_SPACING) * (i - 1), WIDTH_BUTTON, HEIGHT_BUTTON, BUTTONS_NAMES[i])
     end
 end
 
@@ -40,19 +44,17 @@ local function updateAllButtons()
         button.update(buttons[i])
     end
 
-    if buttons[buttonID.resume].clicked then
+    if buttons[BUTTON_ID.resume].clicked then
         isActive = false
     end
 
-    if buttons[buttonID.exit].clicked then
+    if buttons[BUTTON_ID.exit].clicked then
         love.window.close()
     end
 end
 
 function exitPanel.load()
-    imageMessage.x = SCREEN_WIDTH / 2 - imageMessage.width / 2
-    imageMessage.y = SCREEN_HEIGHT / 2 - (imageMessage.height + (MAX_BUTTONS * HEIGHT_BUTTON + (MAX_BUTTONS - 1) * 10)) / 2
-
+    initMessage()
     initButtons()
 end
 
