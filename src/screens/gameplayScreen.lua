@@ -105,7 +105,7 @@ function gameplayScreen.keypressed(key)
     end
 
     if key == "space" and not pausePanel.isActive() then
-        local success = projectiles.spawn(player.x + player.width, player.y + player.height / 2 - BULLET_HEIGHT / 2)
+        local success = projectiles.spawn(player.x + player.width - BULLET_WIDTH, player.y + player.height / 2 - BULLET_HEIGHT / 2)
 
         if success then
             local clone = shot1:clone()
