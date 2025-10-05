@@ -5,6 +5,8 @@ local PLAYER_HEIGHT = 65
 local PLAYER_DEFAULT_SPEED = 750
 local PLAYER_DEFAULT_LIVES = 5
 
+local playerTex
+
 function player.load()
     local posY = SCREEN_HEIGHT / 2 - PLAYER_HEIGHT / 2
 
@@ -14,6 +16,8 @@ function player.load()
     player.height = PLAYER_HEIGHT
     player.speed = PLAYER_DEFAULT_SPEED
     player.lives = PLAYER_DEFAULT_LIVES
+
+    playerTex = love.graphics.newImage("res/characters/player.png")
 end
 
 function player.update(deltaTime)
@@ -27,7 +31,13 @@ function player.update(deltaTime)
 end
 
 function player.draw()
-    love.graphics.rectangle("fill", player.x, player.y, player.width, player.height)
+    local imgWidth = playerTex:getWidth()
+    local imgHeight = playerTex:getHeight()
+    local scaleX = player.width / imgWidth
+    local scaleY = player.height / imgHeight
+    
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(playerTex, player.x, player.y, 0, scaleX, scaleY)
 end
 
 function player.moveUp(deltaTime)

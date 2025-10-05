@@ -8,6 +8,8 @@ local MIN_ENEMY_SPEED = 600
 local MAX_ENEMY_SPEED = 900
 local ENEMY_LIVES = 3
 
+local enemyTex
+
 -- SPAWN CONTROL
 local spawnTimer = 0
 local MIN_TIMER_COOLDOWN = 1.5
@@ -43,6 +45,8 @@ function enemy.load()
     for i = 1, MAX_ENEMIES do
         enemies[i] = nil
     end
+
+    enemyTex = love.graphics.newImage("res/characters/enemy.png")
 end
 
 function enemy.update(deltaTime)
@@ -67,7 +71,13 @@ end
 function enemy.draw()
     for i = 1, MAX_ENEMIES do
         if enemies[i] and enemies[i].isActive then
-            love.graphics.rectangle("fill", enemies[i].x, enemies[i].y, enemies[i].width, enemies[i].height)
+            local imgWidth = enemyTex:getWidth()
+            local imgHeight = enemyTex:getHeight()
+            local scaleX = enemies[i].width / imgWidth
+            local scaleY = enemies[i].height / imgHeight
+
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.draw(enemyTex, enemies[i].x, enemies[i].y, 0, scaleX, scaleY)
         end
     end
 end
