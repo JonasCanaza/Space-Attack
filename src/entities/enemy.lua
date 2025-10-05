@@ -10,7 +10,7 @@ local ENEMY_LIVES = 3
 
 -- SPAWN CONTROL
 local spawnTimer = 0
-local MIN_TIMER_COOLDOWN = 2
+local MIN_TIMER_COOLDOWN = 1.5
 local MAX_TIMER_COOLDOWN = 3
 local spawnDelay = math.random(MIN_TIMER_COOLDOWN, MAX_TIMER_COOLDOWN)
 
@@ -74,6 +74,14 @@ end
 
 function enemy.getAll()
     return enemies
+end
+
+function enemy.resetAll()
+    for i = 1, MAX_ENEMIES do
+        enemies[i] = nil
+    end
+
+    spawnTimer = 0
 end
 
 return enemy

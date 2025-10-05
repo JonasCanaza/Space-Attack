@@ -47,6 +47,18 @@ local function handlePlayerEnemyCollisions()
     end
 end
 
+local function updatePausePanelAction()
+    local action = pausePanel.getLastAction()
+
+    if action == "restart" then
+        gameplayScreen.reset()
+        pausePanel.clearAction()
+    elseif action == "exit" then
+        currentScreen = screens.mainMenu
+        pausePanel.clearAction()
+    end
+end
+
 function gameplayScreen.load()
     player.load()
     projectiles.load()
@@ -76,6 +88,7 @@ function gameplayScreen.update(deltaTime)
     end
 
     pausePanel.update()
+    updatePausePanelAction()
 end
 
 function gameplayScreen.draw()
@@ -91,7 +104,7 @@ function gameplayScreen.keypressed(key)
         pausePanel.toggle()
     end
 
-    if key == "space" then
+    if key == "space" and not pausePanel.isActive() then
         local success = projectiles.spawn(player.x + player.width, player.y + player.height / 2 - BULLET_HEIGHT / 2)
 
         if success then
@@ -99,6 +112,12 @@ function gameplayScreen.keypressed(key)
             love.audio.play(clone)
         end
     end
+end
+
+function gameplayScreen.reset()
+    player.reset()
+    projectiles.resetAll()
+    enemies.resetAll()
 end
 
 return gameplayScreen

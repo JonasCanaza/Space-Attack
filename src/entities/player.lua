@@ -1,12 +1,19 @@
 local player = {}
 
+local PLAYER_WIDTH = 125
+local PLAYER_HEIGHT = 65
+local PLAYER_DEFAULT_SPEED = 750
+local PLAYER_DEFAULT_LIVES = 5
+
 function player.load()
-    player.x = 100
-    player.y = 300
-    player.width = 125
-    player.height = 65
-    player.speed = 750
-    player.lives = 5
+    local posY = SCREEN_HEIGHT / 2 - PLAYER_HEIGHT / 2
+
+    player.x = 50
+    player.y = posY
+    player.width = PLAYER_WIDTH
+    player.height = PLAYER_HEIGHT
+    player.speed = PLAYER_DEFAULT_SPEED
+    player.lives = PLAYER_DEFAULT_LIVES
 end
 
 function player.update(deltaTime)
@@ -29,6 +36,13 @@ end
 
 function player.moveDown(deltaTime)
     player.y = player.y + player.speed * deltaTime
+end
+
+function player.reset()
+    local posY = SCREEN_HEIGHT / 2 - PLAYER_HEIGHT / 2
+
+    player.y = posY
+    player.lives = PLAYER_DEFAULT_LIVES
 end
 
 return player

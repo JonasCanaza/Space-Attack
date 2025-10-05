@@ -65,4 +65,10 @@ function projectile.getAll()
     return bullets
 end
 
+function projectile.resetAll()
+    for i = 1, MAX_PROJECTILES do
+        bullets[i] = nil
+    end
+end
+
 return projectile

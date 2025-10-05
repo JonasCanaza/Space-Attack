@@ -26,6 +26,7 @@ local imageMessage = {
 }
 
 local isActive = false
+local lastAction = nil
 
 local function initMessage()
     imageMessage.x = SCREEN_WIDTH / 2 - imageMessage.width / 2
@@ -52,12 +53,12 @@ local function updateAllButtons()
 
     if buttons[BUTTON_ID.restart].clicked then
         isActive = false
-        print("THE GAME HAS RESTARTED")
+        lastAction = "restart"
     end
 
     if buttons[BUTTON_ID.exit].clicked then
         isActive = false
-        currentScreen = screens.mainMenu
+        lastAction = "exit"
     end
 end
 
@@ -100,6 +101,14 @@ end
 
 function pausePanel.isActive()
     return isActive
+end
+
+function pausePanel.getLastAction()
+    return lastAction
+end
+
+function pausePanel.clearAction()
+    lastAction = nil
 end
 
 return pausePanel
