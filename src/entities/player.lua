@@ -3,7 +3,7 @@ local player = {}
 local PLAYER_WIDTH = 125
 local PLAYER_HEIGHT = 65
 local PLAYER_DEFAULT_SPEED = 750
-local PLAYER_DEFAULT_LIVES = 5
+local PLAYER_DEFAULT_LIVES = 2
 
 local playerTex
 
@@ -16,6 +16,7 @@ function player.load()
     player.height = PLAYER_HEIGHT
     player.speed = PLAYER_DEFAULT_SPEED
     player.lives = PLAYER_DEFAULT_LIVES
+    player.score = 0
 
     playerTex = love.graphics.newImage("res/characters/player.png")
 end
@@ -52,6 +53,11 @@ function player.reset()
     local posY = SCREEN_HEIGHT / 2 - PLAYER_HEIGHT / 2
 
     player.y = posY
+    player.lives = PLAYER_DEFAULT_LIVES
+    player.score = 0
+end
+
+function player.resetLives()
     player.lives = PLAYER_DEFAULT_LIVES
 end
 

@@ -5,6 +5,7 @@ local projectiles = require("src.entities.projectile")
 local enemies = require("src.entities.enemy")
 local collision = require("src.utils.collision")
 local pausePanel = require("src.panels.pausePanel")
+local gameOverPanel = require("src.panels.gameOverPanel")
 
 -- SOUND
 
@@ -47,6 +48,15 @@ local function handlePlayerEnemyCollisions()
     end
 end
 
+local function thePlayerHasLives()
+    if player.lives <= 0 then
+        gameOverPanel.show()
+        return false
+    end
+
+    return true
+end
+
 local function updatePausePanelAction()
     local action = pausePanel.getLastAction()
 
@@ -54,8 +64,24 @@ local function updatePausePanelAction()
         gameplayScreen.reset()
         pausePanel.clearAction()
     elseif action == "exit" then
-        currentScreen = screens.mainMenu
         pausePanel.clearAction()
+        currentScreen = screens.mainMenu
+    end
+end
+
+local function updateGameOverPanelAction()
+    local action = gameOverPanel.getLastAction()
+
+    if action == "continue" then
+        gameplayScreen.continue()
+        gameOverPanel.clearAction()
+    elseif action == "restart" then
+        gameplayScreen.reset()
+        gameOverPanel.clearAction()
+    elseif action == "exit" then
+        gameplayScreen.reset()
+        gameOverPanel.clearAction()
+        currentScreen = screens.mainMenu
     end
 end
 
@@ -65,12 +91,13 @@ function gameplayScreen.load()
     enemies.load()
 
     pausePanel.load()
+    gameOverPanel.load()
 
     shot1 = love.audio.newSource("res/sound/shot01.wav", "static")
 end
 
 function gameplayScreen.update(deltaTime)
-    if not pausePanel.isActive() then
+    if not pausePanel.isActive() and not gameOverPanel.isActive() then
         if love.keyboard.isDown("w") then
             player.moveUp(deltaTime)
         end
@@ -87,8 +114,12 @@ function gameplayScreen.update(deltaTime)
         handlePlayerEnemyCollisions()
     end
 
+    isPlaying = thePlayerHasLives()
+
     pausePanel.update()
     updatePausePanelAction()
+    gameOverPanel.update()
+    updateGameOverPanelAction()
 end
 
 function gameplayScreen.draw()
@@ -97,25 +128,38 @@ function gameplayScreen.draw()
     enemies.draw()
 
     pausePanel.draw()
+    gameOverPanel.draw()
 end
 
 function gameplayScreen.keypressed(key)
-    if key == "escape" then
+    if not isPlaying then
+        return
+    end
+
+    if key == "escape" and not gameOverPanel.isActive() then
         pausePanel.toggle()
     end
 
-    if key == "space" and not pausePanel.isActive() then
-        local success = projectiles.spawn(player.x + player.width - BULLET_WIDTH, player.y + player.height / 2 - BULLET_HEIGHT / 2)
+    if not pausePanel.isActive() and not gameOverPanel.isActive() then
+        if key == "space" then
+            local success = projectiles.spawn(player.x + player.width - BULLET_WIDTH, player.y + player.height / 2 - BULLET_HEIGHT / 2)
 
-        if success then
-            local clone = shot1:clone()
-            love.audio.play(clone)
+            if success then
+                local clone = shot1:clone()
+                love.audio.play(clone)
+            end
         end
     end
 end
 
 function gameplayScreen.reset()
     player.reset()
+    projectiles.resetAll()
+    enemies.resetAll()
+end
+
+function gameplayScreen.continue()
+    player.resetLives()
     projectiles.resetAll()
     enemies.resetAll()
 end

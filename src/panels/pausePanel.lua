@@ -44,6 +44,10 @@ local function initButtons()
 end
 
 local function updateAllButtons()
+    if not isActive then
+        return
+    end
+
     for i = 1, MAX_BUTTONS do
         button.update(buttons[i])
     end
