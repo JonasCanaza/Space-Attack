@@ -29,7 +29,8 @@ local logo = {
     x = 0,
     y = 0,
     width = 700,
-    height = 350
+    height = 325,
+    texture = nil
 }
 
 local function initLogoAndButtons()
@@ -73,6 +74,8 @@ function mainMenuScreen.load()
     initLogoAndButtons()
     exitPanel.load()
     button.load()
+
+    logo.texture = love.graphics.newImage("res/ui/logo.png")
 end
 
 function mainMenuScreen.update(deltaTime)
@@ -88,7 +91,7 @@ function mainMenuScreen.draw()
         button.draw(buttons[i])
     end
 
-    love.graphics.rectangle("fill", logo.x, logo.y, logo.width, logo.height)
+    love.graphics.draw(logo.texture, logo.x, logo.y)
 
     exitPanel.draw()
 end

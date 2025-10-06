@@ -22,7 +22,8 @@ local imageMessage = {
     x = 0,
     y = 0,
     width = 700,
-    height = 300
+    height = 300,
+    texture = nil
 }
 
 local isActive = false
@@ -65,6 +66,8 @@ end
 function pausePanel.load()
     initMessage()
     initButtons()
+
+    imageMessage.texture = love.graphics.newImage("res/ui/pausePanelMessage.png")
 end
 
 function pausePanel.update()
@@ -80,7 +83,7 @@ function pausePanel.draw()
     love.graphics.rectangle("fill", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
     love.graphics.setColor(1, 1, 1)
 
-    love.graphics.rectangle("fill", imageMessage.x, imageMessage.y, imageMessage.width, imageMessage.height)
+    love.graphics.draw(imageMessage.texture, imageMessage.x, imageMessage.y)
 
     for i = 1, MAX_BUTTONS do
         button.draw(buttons[i])
