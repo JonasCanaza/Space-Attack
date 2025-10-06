@@ -33,6 +33,16 @@ local logo = {
     texture = nil
 }
 
+-- BACKGROUND
+
+local background = {
+    x = 0,
+    y = 0,
+    width = SCREEN_WIDTH,
+    height = SCREEN_HEIGHT,
+    texture = nil
+}
+
 local function initLogoAndButtons()
     local totalHeight = logo.height + (MAX_BUTTONS * HEIGHT_BUTTON) + (MAX_BUTTONS - 1) * BUTTON_SPACING
     local startY = SCREEN_HEIGHT / 2 - totalHeight / 2
@@ -76,6 +86,7 @@ function mainMenuScreen.load()
     button.load()
 
     logo.texture = love.graphics.newImage("res/ui/logo.png")
+    background.texture = love.graphics.newImage("res/ui/mainMenu.png")
 end
 
 function mainMenuScreen.update(deltaTime)
@@ -87,6 +98,14 @@ function mainMenuScreen.update(deltaTime)
 end
 
 function mainMenuScreen.draw()
+    local imgWidth = background.texture:getWidth()
+    local imgHeight = background.texture:getHeight()
+    local scaleX = background.width / imgWidth
+    local scaleY = background.height / imgHeight
+
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(background.texture, background.x, background.y, 0, scaleX, scaleY)
+
     for i = 1, MAX_BUTTONS do
         button.draw(buttons[i])
     end

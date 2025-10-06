@@ -7,11 +7,49 @@ local collision = require("src.utils.collision")
 local pausePanel = require("src.panels.pausePanel")
 local gameOverPanel = require("src.panels.gameOverPanel")
 
+-- BACKGROUND
+
+local background = {
+    layers = {
+        { image = nil, speed = 300,  x = 0 },
+        { image = nil, speed = 525, x = 0 },
+        { image = nil, speed = 800, x = 0 }
+    },
+    y = 0,
+    width = SCREEN_WIDTH,
+    height = SCREEN_HEIGHT
+}
+
 -- SOUND
 
 local shot1
 
 local isPlaying = true
+
+local function updateBackground(deltaTime)
+    for i = 1, #background.layers do
+        local layer = background.layers[i]
+        layer.x = layer.x - layer.speed * deltaTime
+
+        if layer.x <= -background.width then
+            layer.x = 0
+        end
+    end
+end
+
+local function drawBackground()
+    for i = 1, #background.layers do
+        local layer = background.layers[i]
+        local img = layer.image
+        local imgWidth = img:getWidth()
+        local imgHeight = img:getHeight()
+        local scaleX = background.width / imgWidth
+        local scaleY = background.height / imgHeight
+
+        love.graphics.draw(img, layer.x, background.y, 0, scaleX, scaleY)
+        love.graphics.draw(img, layer.x + background.width, background.y, 0, scaleX, scaleY)
+    end
+end
 
 local function handleBulletEnemyCollisions()
     local allBullets = projectiles.getAll()
@@ -93,11 +131,17 @@ function gameplayScreen.load()
     pausePanel.load()
     gameOverPanel.load()
 
+    background.layers[1].image = love.graphics.newImage("res/ui/gameplay01.png")
+    background.layers[2].image = love.graphics.newImage("res/ui/gameplay02.png")
+    background.layers[3].image = love.graphics.newImage("res/ui/gameplay03.png")
+
     shot1 = love.audio.newSource("res/sound/shot01.wav", "static")
 end
 
 function gameplayScreen.update(deltaTime)
     if not pausePanel.isActive() and not gameOverPanel.isActive() then
+        updateBackground(deltaTime)
+
         if love.keyboard.isDown("w") then
             player.moveUp(deltaTime)
         end
@@ -123,6 +167,8 @@ function gameplayScreen.update(deltaTime)
 end
 
 function gameplayScreen.draw()
+    drawBackground()
+
     player.draw()
     projectiles.draw()
     enemies.draw()
