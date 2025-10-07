@@ -2,6 +2,7 @@ local mainMenuScreen = {}
 
 local button = require("src.interface.button")
 local exitPanel = require("src.panels.exitPanel")
+local soundManager = require("src.systems.soundManager")
 
 -- BUTTON
 
@@ -64,6 +65,7 @@ local function updateAllButtons()
     end
 
     if buttons[SCREEN_ID.gameplay].clicked then
+        soundManager.playMusic("gameplay", true)
         currentScreen = screens.gameplay
     end
 
@@ -87,6 +89,9 @@ function mainMenuScreen.load()
 
     logo.texture = love.graphics.newImage("res/ui/logo.png")
     background.texture = love.graphics.newImage("res/ui/mainMenu.png")
+
+    soundManager.load()
+    soundManager.playMusic("menu", true)
 end
 
 function mainMenuScreen.update(deltaTime)
@@ -118,6 +123,12 @@ end
 function mainMenuScreen.keypressed(key)
     if key == "escape" then
         exitPanel.toggle()
+
+        if exitPanel.isActive() then
+            soundManager.playSFX("panelOn")
+        else
+            soundManager.playSFX("panelOff")
+        end
     end
 end
 

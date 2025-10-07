@@ -54,6 +54,7 @@ local function updateAllButtons()
 
     if buttons[BUTTON_ID.resume].clicked then
         isActive = false
+        lastAction = "resume"
     end
 
     if buttons[BUTTON_ID.restart].clicked then

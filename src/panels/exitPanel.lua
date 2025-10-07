@@ -50,7 +50,7 @@ local function updateAllButtons()
     end
 
     if buttons[BUTTON_ID.exit].clicked then
-        love.window.close()
+        love.event.quit()
     end
 end
 

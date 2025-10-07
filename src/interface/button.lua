@@ -1,5 +1,7 @@
 local button = {}
 
+local soundManager = require("src.systems.soundManager")
+
 local textSize = 40
 local font = love.graphics.newFont(textSize)
 local ButtonState = {
@@ -17,6 +19,16 @@ local normalButtonTex
 local hoverButtonTex
 local pressedButtonTex
 
+local function isMouseOverButton(btn)
+    local mouseX = love.mouse.getX()
+    local mouseY = love.mouse.getY()
+
+    return mouseX > btn.x and
+    mouseX < btn.x + btn.width and
+    mouseY > btn.y and
+    mouseY < btn.y + btn.height
+end
+
 function button.create(x, y, width, height, text)
     return {
         x = x,
@@ -25,7 +37,8 @@ function button.create(x, y, width, height, text)
         height = height or DEFAULT_HEIGTH,
         text = text or DEFAULT_NAME,
         state = ButtonState.Normal,
-        clicked = false
+        clicked = false,
+        hoveredOnce = false
     }
 end
 
@@ -43,13 +56,20 @@ function button.update(btn)
             btn.state = ButtonState.Pressed
         else
             if btn.state == ButtonState.Pressed then
+                soundManager.playSFX("buttonPressed")
                 btn.clicked = true
             end
 
             btn.state = ButtonState.Hover
+
+            if not btn.hoveredOnce then
+                soundManager.playSFX("buttonHover")
+                btn.hoveredOnce = true
+            end
         end
     else
         btn.state = ButtonState.Normal
+        btn.hoveredOnce = false
     end
 end
 
@@ -87,16 +107,6 @@ function button.draw(btn)
     local textY = btn.y + (btn.height / 2) - (textHeight / 2)
     
     love.graphics.printf(btn.text, btn.x, textY, btn.width, "center")
-end
-
-function isMouseOverButton(btn)
-    local mouseX = love.mouse.getX()
-    local mouseY = love.mouse.getY()
-
-    return mouseX > btn.x and
-    mouseX < btn.x + btn.width and
-    mouseY > btn.y and
-    mouseY < btn.y + btn.height
 end
 
 return button
