@@ -84,7 +84,7 @@ function pausePanel.draw()
         return
     end
 
-    love.graphics.setColor(0.0, 0.0, 0.0, 0.8)
+    love.graphics.setColor(0.0, 0.0, 0.0, 0.75)
     love.graphics.rectangle("fill", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
     love.graphics.setColor(1, 1, 1)
 

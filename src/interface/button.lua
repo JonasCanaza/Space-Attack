@@ -49,7 +49,7 @@ function button.load()
     hoverButtonTex = love.graphics.newImage("res/ui/hoverButton.png")
     pressedButtonTex = love.graphics.newImage("res/ui/pressedButton.png")
 
-    font = love.graphics.newFont("res/font/ArchivoBlack-Regular.ttf", 48)
+    font = love.graphics.newFont("res/font/Black-Regular.ttf", 48)
 end
 
 function button.update(btn)

@@ -88,7 +88,7 @@ function mainMenuScreen.load()
     button.load()
 
     logo.texture = love.graphics.newImage("res/ui/logo.png")
-    background.texture = love.graphics.newImage("res/ui/mainMenu.png")
+    background.texture = love.graphics.newImage("res/background/mainMenu.png")
 
     soundManager.load()
     soundManager.playMusic("menu", true)
@@ -108,7 +108,6 @@ function mainMenuScreen.draw()
     local scaleX = background.width / imgWidth
     local scaleY = background.height / imgHeight
 
-    love.graphics.setColor(1, 1, 1)
     love.graphics.draw(background.texture, background.x, background.y, 0, scaleX, scaleY)
 
     for i = 1, MAX_BUTTONS do

@@ -6,7 +6,27 @@ local sceneButton = {}
 local BUTTON_TEXT = "Back"
 local WIDTH_BUTTON = 300
 local HEIGHT_BUTTON = 80
-local MARGIN_BUTTON = 10
+local MARGIN_BUTTON = 20
+
+-- BACKGROUND
+
+local background = {
+    x = 0,
+    y = 0,
+    width = SCREEN_WIDTH,
+    height = SCREEN_HEIGHT,
+    texture = nil
+}
+
+-- TEXT
+
+local text = {
+    x = 0,
+    y = 0,
+    width = SCREEN_WIDTH,
+    height = SCREEN_HEIGHT,
+    texture = nil
+}
 
 local function initButton()
     local posX = SCREEN_WIDTH / 2 - WIDTH_BUTTON / 2
@@ -17,6 +37,9 @@ end
 
 function creditsScreen.load()
     initButton()
+
+    background.texture = love.graphics.newImage("res/background/credits.png")
+    text.texture = love.graphics.newImage("res/ui/creditsText.png")
 end
 
 function creditsScreen.update(deltaTime)
@@ -28,6 +51,18 @@ function creditsScreen.update(deltaTime)
 end
 
 function creditsScreen.draw()
+    local imgWidthBackground = background.texture:getWidth()
+    local imgHeightBackground = background.texture:getHeight()
+    local scaleBackgroundX = background.width / imgWidthBackground
+    local scaleBackgroundY = background.height / imgHeightBackground
+    local imgWidthText = text.texture:getWidth()
+    local imgHeightText = text.texture:getHeight()
+    local scaleTextX = text.width / imgWidthText
+    local scaleTextY = text.height / imgHeightText
+
+    love.graphics.draw(background.texture, background.x, background.y, 0, scaleBackgroundX, scaleBackgroundY)
+    love.graphics.draw(text.texture, text.x, text.y, 0, scaleTextX, scaleTextY)
+
     button.draw(sceneButton)
 end
 

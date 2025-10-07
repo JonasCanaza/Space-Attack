@@ -25,6 +25,11 @@ local isPlaying = true
 local font
 local heart
 
+-- POINT RANGE
+
+local MIN_POINT_RANGE = 25
+local MAX_POINT_RANGE = 50
+
 local function updateBackground(deltaTime)
     for i = 1, #background.layers do
         local layer = background.layers[i]
@@ -71,7 +76,7 @@ local function handleBulletEnemyCollisions()
                         soundManager.playSFX("hit1")
                         allEnemies[j].lives = allEnemies[j].lives - 1
                         allBullets[i].isActive = false
-                        player.score = player.score + math.random(25, 50)
+                        player.score = player.score + math.random(MIN_POINT_RANGE, MAX_POINT_RANGE)
                         
                         if allEnemies[j].lives <= 0 then
                             allEnemies[j].isActive = false
@@ -191,14 +196,14 @@ function gameplayScreen.load()
     pausePanel.load()
     gameOverPanel.load()
 
-    background.layers[1].image = love.graphics.newImage("res/ui/gameplay01.png")
-    background.layers[2].image = love.graphics.newImage("res/ui/gameplay02.png")
-    background.layers[3].image = love.graphics.newImage("res/ui/gameplay03.png")
+    background.layers[1].image = love.graphics.newImage("res/background/gameplay01.png")
+    background.layers[2].image = love.graphics.newImage("res/background/gameplay02.png")
+    background.layers[3].image = love.graphics.newImage("res/background/gameplay03.png")
     heart = love.graphics.newImage("res/ui/heart.png")
 
     soundManager.load()
 
-    font = love.graphics.newFont("res/font/ArchivoBlack-Regular.ttf", 36)
+    font = love.graphics.newFont("res/font/Black-Regular.ttf", 36)
 end
 
 function gameplayScreen.update(deltaTime)
