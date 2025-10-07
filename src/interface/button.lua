@@ -19,6 +19,8 @@ local normalButtonTex
 local hoverButtonTex
 local pressedButtonTex
 
+local font
+
 local function isMouseOverButton(btn)
     local mouseX = love.mouse.getX()
     local mouseY = love.mouse.getY()
@@ -46,6 +48,8 @@ function button.load()
     normalButtonTex = love.graphics.newImage("res/ui/normalButton.png")
     hoverButtonTex = love.graphics.newImage("res/ui/hoverButton.png")
     pressedButtonTex = love.graphics.newImage("res/ui/pressedButton.png")
+
+    font = love.graphics.newFont("res/font/ArchivoBlack-Regular.ttf", 48)
 end
 
 function button.update(btn)

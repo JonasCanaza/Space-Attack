@@ -22,6 +22,8 @@ local background = {
 }
 
 local isPlaying = true
+local font
+local heart
 
 local function updateBackground(deltaTime)
     for i = 1, #background.layers do
@@ -69,6 +71,7 @@ local function handleBulletEnemyCollisions()
                         soundManager.playSFX("hit1")
                         allEnemies[j].lives = allEnemies[j].lives - 1
                         allBullets[i].isActive = false
+                        player.score = player.score + math.random(25, 50)
                         
                         if allEnemies[j].lives <= 0 then
                             allEnemies[j].isActive = false
@@ -151,6 +154,35 @@ local function updateGameOverPanelAction()
     end
 end
 
+local function drawUI()
+    love.graphics.setFont(font)
+
+    local scoreText = "Score: " .. tostring(player.score)
+    local textWidth = font:getWidth(scoreText)
+    local textX = (SCREEN_WIDTH / 2) - (textWidth / 2)
+    local textY = 5
+
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print(scoreText, textX, textY)
+
+    local lifeSize = 40
+    local margin = 10
+
+    local heartWidth = heart:getWidth()
+    local heartHeight = heart:getHeight()
+
+    local scale = lifeSize / heartHeight
+
+    local totalWidth = (heartWidth * scale * player.lives) + (margin * (player.lives - 1))
+    local startX = (SCREEN_WIDTH / 2) - (totalWidth / 2)
+    local y = SCREEN_HEIGHT - lifeSize - 10
+
+    for i = 1, player.lives do
+        local x = startX + (i - 1) * (heartWidth * scale + margin)
+        love.graphics.draw(heart, x, y, 0, scale, scale)
+    end
+end
+
 function gameplayScreen.load()
     player.load()
     projectiles.load()
@@ -162,8 +194,11 @@ function gameplayScreen.load()
     background.layers[1].image = love.graphics.newImage("res/ui/gameplay01.png")
     background.layers[2].image = love.graphics.newImage("res/ui/gameplay02.png")
     background.layers[3].image = love.graphics.newImage("res/ui/gameplay03.png")
+    heart = love.graphics.newImage("res/ui/heart.png")
 
     soundManager.load()
+
+    font = love.graphics.newFont("res/font/ArchivoBlack-Regular.ttf", 36)
 end
 
 function gameplayScreen.update(deltaTime)
@@ -198,6 +233,8 @@ function gameplayScreen.draw()
     player.draw()
     projectiles.draw()
     enemies.draw()
+
+    drawUI()
 
     pausePanel.draw()
     gameOverPanel.draw()
@@ -239,8 +276,6 @@ end
 
 function gameplayScreen.continue()
     player.resetLives()
-    projectiles.resetAll()
-    enemies.resetAll()
 end
 
 return gameplayScreen

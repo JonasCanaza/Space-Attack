@@ -3,7 +3,7 @@ local player = {}
 local PLAYER_WIDTH = 125
 local PLAYER_HEIGHT = 65
 local PLAYER_DEFAULT_SPEED = 750
-local PLAYER_DEFAULT_LIVES = 2
+local PLAYER_DEFAULT_LIVES = 5
 
 local playerTex
 

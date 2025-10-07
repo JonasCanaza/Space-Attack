@@ -13,7 +13,7 @@ local enemyTex
 -- SPAWN CONTROL
 local spawnTimer = 0
 local MIN_TIMER_COOLDOWN = 1.5
-local MAX_TIMER_COOLDOWN = 3
+local MAX_TIMER_COOLDOWN = 2.25
 local spawnDelay = math.random(MIN_TIMER_COOLDOWN, MAX_TIMER_COOLDOWN)
 
 local function spawnEnemy()
